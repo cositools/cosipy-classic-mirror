@@ -8,7 +8,7 @@ on:
   # 1. this mirror branch is updates, i.e. run it immediatly on first push
   push:
     branches:
-      - cositools-cosipy-classic-mirror
+      - cosi-cosipy-classic-mirror
   # 2. on a daily schedule, every 4 hours
   schedule:
     - cron: '0 */4 * * *'
