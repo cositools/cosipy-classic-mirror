@@ -1,0 +1,28 @@
+# .github/workflows/mirror.yml
+
+# This workflow mirrors the COSIpy classic repository
+name: 'COSIpy mirror'
+
+on:
+  # Update the mirror when
+  # 1. this mirror branch is updates, i.e. run it immediatly on first push
+  push:
+    branches:
+      - cositools-cosipy-classic-mirror
+  # 2. on a daily schedule, every 4 hours
+  schedule:
+    - cron: '0 */4 * * *'
+  # 3. Manually from the API/CLI/UI
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    name: mirror
+    steps:
+      - name: mirror
+        run: |
+          git clone --bare "https://x-access-token:${{ secrets.MIRROR }}@github.com/${GITHUB_REPOSITORY}.git" . || exit 1
+          git remote add --mirror=fetch mirror "https://github.com/tsiegert/cosipy" || exit 1
+          git fetch mirror +refs/heads/*:refs/remotes/origin/* || exit 1
+          git push --force --mirror --prune origin || exit 1i
